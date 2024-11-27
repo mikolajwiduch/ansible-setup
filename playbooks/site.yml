@@ -1,5 +1,6 @@
 - name: Deploy Docker containers
   hosts: all
   become: true
+  gather_facts: true
   roles:
     - docker
