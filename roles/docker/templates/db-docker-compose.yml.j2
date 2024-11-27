@@ -1,9 +1,0 @@
-version: '3.8'
-services:
-  db:
-    image: {{ docker_image }}
-    environment:
-      MYSQL_ROOT_PASSWORD: vprodbpass
-      MYSQL_DATABASE: accounts
-    ports:
-      - "3306:3306"

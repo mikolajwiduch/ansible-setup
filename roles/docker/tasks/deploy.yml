@@ -1,20 +1,15 @@
+- name: Debug docker_containers
+  debug:
+    var: docker_containers
+
 - name: Create Docker Compose file
-  copy:
+  template:
+    src: docker-compose.j2
     dest: /home/{{ ansible_user }}/docker-compose.yml
-    content: |
-      version: '3.8'
-      services:
-        {% for container in docker_containers %}
-        {{ container.name }}:
-          image: {{ container.image }}
-          ports:
-          {% for port in container.ports %}
-            - "{{ port }}"
-          {% endfor %}
-          volumes:
-          {% for volume in container.volumes %}
-            - "{{ volume }}"
-          {% endfor %}
-          restart: always
-        {% endfor %}
-  when: docker_containers is defined
+  when: docker_containers is defined and docker_containers | length > 0
+
+- name: Start containers using Docker Compose
+  command: docker-compose up -d
+  args:
+    chdir: /home/{{ ansible_user }}
+  when: docker_containers is defined and docker_containers | length > 0
