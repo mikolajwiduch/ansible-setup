@@ -17,8 +17,4 @@
           {% endfor %}
           restart: always
         {% endfor %}
-
-- name: Bring up Docker containers
-  command:
-    cmd: docker-compose up -d
-    chdir: /home/{{ ansible_user }}
+  when: docker_containers is defined
