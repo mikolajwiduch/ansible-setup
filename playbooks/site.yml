@@ -2,5 +2,5 @@
   hosts: all
   become: true
   roles:
-    - webserver
-    - dbserver
+    - { role: webserver, when: "'webservers' in group_names" }
+    - { role: dbserver, when: "'dbservers' in group_names" }
