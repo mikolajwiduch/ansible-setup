@@ -4,7 +4,6 @@
 - name: Explicitly include host variables
   include_vars:
     file: "{{ inventory_hostname }}.yml"
-    dir: "{{ playbook_dir }}/host_vars"
   when: docker_containers is not defined
 
 - include_tasks: deploy.yml
