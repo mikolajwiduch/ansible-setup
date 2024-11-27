@@ -1,0 +1,19 @@
+docker_containers:
+  - name: vprofileapp
+    image: mikolajwiduch/vprofileapp
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/data/vprofileapp:/app"
+  - name: vprofileweb
+    image: mikolajwiduch/vprofileweb
+    ports:
+      - "80:80"
+    volumes:
+      - "/data/vprofileweb:/web"
+  - name: vprofiledb
+    image: mikolajwiduch/vprofiledb
+    ports:
+      - "3306:3306"
+    volumes:
+      - "/data/vprofiledb:/db"

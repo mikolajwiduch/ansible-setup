@@ -2,15 +2,21 @@
   copy:
     dest: /home/{{ ansible_user }}/docker-compose.yml
     content: |
-      version: '3.3'
+      version: '3.8'
       services:
-        {{ docker_container_name }}:
-          image: {{ docker_image }}
+        {% for container in docker_containers %}
+        {{ container.name }}:
+          image: {{ container.image }}
           ports:
-          {% for port in docker_ports %}
+          {% for port in container.ports %}
             - "{{ port }}"
           {% endfor %}
+          volumes:
+          {% for volume in container.volumes %}
+            - "{{ volume }}"
+          {% endfor %}
           restart: always
+        {% endfor %}
 
 - name: Bring up Docker containers
   command:

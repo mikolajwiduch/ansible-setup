@@ -1,4 +1,4 @@
-docker_container_name: "vprofileapp"
-docker_image: "mikolajwiduch/vprofileapp"
-docker_ports:
-  - "8080:8080"
+# docker_container_name: "vprofileapp"
+# docker_image: "mikolajwiduch/vprofileapp"
+# docker_ports:
+#   - "8080:8080"
