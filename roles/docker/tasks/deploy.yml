@@ -1,0 +1,9 @@
+- name: Create Docker Compose file
+  template:
+    src: "{{ docker_container_name }}-docker-compose.yml.j2"
+    dest: /home/{{ ansible_user }}/docker-compose.yml
+
+- name: Bring up Docker container
+  command:
+    cmd: docker-compose up -d
+    chdir: /home/{{ ansible_user }}
