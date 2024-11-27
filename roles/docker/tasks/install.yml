@@ -1,7 +1,45 @@
+- name: Remove conflicting Docker packages
+  package:
+    name:
+      - docker
+      - docker-common
+      - docker-selinux
+      - docker-engine
+    state: absent
+
+- name: Ensure required kernel modules are loaded
+  shell: modprobe {{ item }}
+  with_items:
+    - overlay
+    - br_netfilter
+  ignore_errors: true
+
+- name: Install required packages for Docker
+  package:
+    name:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+    state: present
+
+- name: Add Docker repository
+  command:
+    cmd: >
+      yum-config-manager --add-repo
+      https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
+
 - name: Install Docker
   package:
-    name: docker
+    name: docker-ce
     state: present
+
+- name: Start Docker service
+  service:
+    name: docker
+    state: started
+    enabled: true
 
 - name: Install prerequisites for Docker Compose
   package:
