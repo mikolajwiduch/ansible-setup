@@ -1,2 +1,4 @@
-docker_image: mikolajwiduch/vprofiledb
-docker_container_name: vprofile_db
+docker_image: mikolajwiduch/vprofileweb
+docker_container_name: vprofile_web
+docker_ports:
+  - "80:80"

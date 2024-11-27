@@ -1,9 +1,18 @@
 - name: Create Docker Compose file
-  template:
-    src: "{{ docker_container_name }}-docker-compose.yml.j2"
+  copy:
     dest: /home/{{ ansible_user }}/docker-compose.yml
+    content: |
+      version: '3.3'
+      services:
+        {{ docker_container_name }}:
+          image: {{ docker_image }}
+          ports:
+          {% for port in docker_ports %}
+            - "{{ port }}"
+          {% endfor %}
+          restart: always
 
-- name: Bring up Docker container
+- name: Bring up Docker containers
   command:
     cmd: docker-compose up -d
     chdir: /home/{{ ansible_user }}

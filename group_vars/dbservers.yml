@@ -1,2 +1,4 @@
-docker_image: mikolajwiduch/vprofiledb
-docker_container_name: vprofile_db
+docker_container_name: "vprofiledb"
+docker_image: "mikolajwiduch/vprofiledb"
+docker_ports:
+  - "3306:3306"
