@@ -1,9 +1,16 @@
-- name: Install required packages
+- name: Install Docker
   package:
-    name:
-      - docker
-      - docker-compose
+    name: docker
     state: present
+
+- name: Install prerequisites for Docker Compose
+  package:
+    name: python3-pip
+    state: present
+
+- name: Install Docker Compose via pip
+  pip:
+    name: docker-compose
 
 - name: Start Docker service
   service:
