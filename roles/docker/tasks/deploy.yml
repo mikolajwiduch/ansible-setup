@@ -1,7 +1,7 @@
-- name: Deploy Docker containers on group-specific hosts
-  hosts: all
+- name: Deploy Docker containers to database servers
+  hosts: dbservers
   tasks:
-    - name: Start Docker containers for each group
+    - name: Start database containers
       community.docker.docker_container:
         name: "{{ item.name }}"
         image: "{{ item.image }}"
@@ -10,4 +10,29 @@
         volumes: "{{ item.volumes | default([]) }}"
         env: "{{ item.environment | default({}) }}"
       with_items: "{{ docker_containers }}"
-      when: docker_containers is defined
+
+- name: Deploy Docker containers to web servers
+  hosts: webservers
+  tasks:
+    - name: Start web server containers
+      community.docker.docker_container:
+        name: "{{ item.name }}"
+        image: "{{ item.image }}"
+        state: started
+        ports: "{{ item.ports }}"
+        volumes: "{{ item.volumes | default([]) }}"
+        env: "{{ item.environment | default({}) }}"
+      with_items: "{{ docker_containers }}"
+
+- name: Deploy Docker containers to app servers
+  hosts: appservers
+  tasks:
+    - name: Start app server containers
+      community.docker.docker_container:
+        name: "{{ item.name }}"
+        image: "{{ item.image }}"
+        state: started
+        ports: "{{ item.ports }}"
+        volumes: "{{ item.volumes | default([]) }}"
+        env: "{{ item.environment | default({}) }}"
+      with_items: "{{ docker_containers }}"
