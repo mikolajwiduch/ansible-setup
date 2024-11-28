@@ -45,7 +45,9 @@
 
 
 - name: Start containers using Docker Compose
-  command: docker compose up -d
+  command:
+    cmd: >
+      docker compose up -d
   args:
     chdir: /home/{{ ansible_user }}
   when: docker_containers is defined and docker_containers | length > 0
