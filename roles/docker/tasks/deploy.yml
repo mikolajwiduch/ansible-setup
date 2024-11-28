@@ -10,6 +10,25 @@
   debug:
     msg: "Group {{ group_names }} has docker_containers: {{ docker_containers }}"
 
+- name: Ensure Docker Compose is installed
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install Docker Compose
+      shell: |
+        curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+      args:
+        executable: /bin/bash
+      register: install_result
+      changed_when: "'Downloading' in install_result.stdout"
+
+    - name: Verify Docker Compose installation
+      command: docker-compose --version
+      register: compose_check
+    - debug:
+        var: compose_check.stdout
+
 - name: Create Docker Compose file
   template:
     src: docker-compose.j2
