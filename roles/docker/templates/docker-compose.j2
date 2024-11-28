@@ -4,15 +4,15 @@ services:
   {{ container.name }}:
     image: {{ container.image }}
     {% if container.ports is defined %}
-    ports:
+ports:
 {% for port in container.ports %}
-      - "{{ port }}"
+        - "{{ port }}"
 {% endfor %}
     {% endif %}
     {% if container.volumes is defined %}
-    volumes:
+volumes:
 {% for volume in container.volumes %}
-      - "{{ volume }}"
+        - "{{ volume }}"
 {% endfor %}
     {% endif %}
     {% if container.environment is defined %}
