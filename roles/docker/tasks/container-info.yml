@@ -1,15 +1,9 @@
-- name: Fetch information about running Docker containers
+- name: Display container details
   community.docker.docker_container_info:
     name: "{{ item.name }}"
-  with_items: "{{ docker_containers | default([]) }}"
-  register: container_info
+  with_items: "{{ docker_containers }}"
+  register: container_info_results
 
-- name: Display container details
+- name: Print container details
   debug:
-    msg: |
-      Container Name: {{ item.container.name }}
-      Image: {{ item.container.image }}
-      Status: {{ item.container.status }}
-      Ports: {{ item.container.ports }}
-  with_items: "{{ container_info.results }}"
-  when: item.container is defined
+    var: container_info_results.results
