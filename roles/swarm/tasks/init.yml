@@ -1,0 +1,11 @@
+- name: Initialize Docker Swarm on the webservers group leader
+  command:
+    cmd: docker swarm init --advertise-addr {{ ansible_host }}
+  register: swarm_init
+  when: inventory_hostname == groups['webservers'][0]
+
+- name: Extract join token for workers
+  shell: docker swarm join-token worker -q
+  register: swarm_worker_token
+  when: inventory_hostname == groups['webservers'][0]
+  changed_when: false

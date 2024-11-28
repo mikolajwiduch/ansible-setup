@@ -1,0 +1,4 @@
+- name: Create overlay network for containers
+  command:
+    cmd: docker network create --driver overlay {{ swarm_network_name }}
+  when: inventory_hostname == groups['webservers'][0]

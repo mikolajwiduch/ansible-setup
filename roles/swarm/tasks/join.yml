@@ -1,0 +1,4 @@
+- name: Join Docker Swarm as worker
+  command:
+    cmd: docker swarm join --token {{ hostvars[groups['webservers'][0]].swarm_worker_token.stdout }} {{ hostvars[groups['webservers'][0]].ansible_host }}:2377
+  when: inventory_hostname in groups['appservers'] or inventory_hostname in groups['dbservers']
