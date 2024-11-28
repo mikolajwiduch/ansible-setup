@@ -6,13 +6,12 @@ services:
     {% if container.ports is defined %}
 ports:
 {% for port in container.ports %}
-        - "{{ port }}"
+    - "{{ port }}"
 {% endfor %}
     {% endif %}
-    {% if container.volumes is defined %}
-volumes:
+    {% if container.volumes is defined %}volumes:
 {% for volume in container.volumes %}
-        - "{{ volume }}"
+    - "{{ volume }}"
 {% endfor %}
     {% endif %}
     {% if container.environment is defined %}
