@@ -1,0 +1,10 @@
+- name: Debug group and host variables
+  hosts: all
+  tasks:
+    - name: Debug group variable debug_var
+      debug:
+        var: debug_var
+
+    - name: Debug docker_containers variable
+      debug:
+        var: docker_containers
