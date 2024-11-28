@@ -6,5 +6,6 @@
     networks:
       - name: swarm_overlay
     ports: "{{ item.ports }}"
+    volumes: "{{ item.volumes | default([]) }}"
     env: "{{ item.environment | default({}) }}"
   with_items: "{{ docker_containers | default([]) }}"
