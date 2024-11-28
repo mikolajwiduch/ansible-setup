@@ -1,5 +1,4 @@
 - name: Deploy Docker containers
-  hosts: all
   tasks:
     - name: Start containers based on group vars
       community.docker.docker_container:
