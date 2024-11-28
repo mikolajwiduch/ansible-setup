@@ -1,3 +1,4 @@
+debug_var: "dbservers"
 docker_containers:
   - name: vprofiledb
     image: mikolajwiduch/vprofiledb
@@ -5,4 +6,3 @@ docker_containers:
       - "3306:3306"
     volumes:
       - "/data/vprofiledb:/db"
-debug_var: "dbservers"

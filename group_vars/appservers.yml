@@ -1,3 +1,4 @@
+debug_var: "appservers"
 docker_containers:
   - name: vprofileapp
     image: mikolajwiduch/vprofileapp
@@ -5,4 +6,3 @@ docker_containers:
       - "8080:8080"
     volumes:
       - "/data/vprofileapp:/app"
-debug_var: "appservers"

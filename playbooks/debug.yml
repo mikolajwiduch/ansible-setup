@@ -1,10 +1,6 @@
 - name: Debug Variables
   hosts: all
   tasks:
-    - name: Manually include group vars
-      include_vars:
-        dir: ../group_vars/
-
     - name: Debug group variable debug_var
       debug:
         var: debug_var
