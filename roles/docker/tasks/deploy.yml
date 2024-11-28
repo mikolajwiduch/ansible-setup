@@ -1,5 +1,3 @@
-- name: Deploy Docker containers
-  tasks:
     - name: Start containers based on group vars
       community.docker.docker_container:
         name: "{{ item.name }}"
