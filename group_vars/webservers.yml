@@ -5,3 +5,4 @@ docker_containers:
       - "80:80"
     volumes:
       - "/data/vprofileweb:/web"
+debug_var: "webservers"
