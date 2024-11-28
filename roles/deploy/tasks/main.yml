@@ -1,0 +1,2 @@
+- include_tasks: deploy-containers.yml
+- include_tasks: container-info.yml

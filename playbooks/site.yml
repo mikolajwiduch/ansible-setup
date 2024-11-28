@@ -1,7 +1,8 @@
-- name: Deploy Docker swarm & containers
+- name: Setup Docker Swarm and deploy containers
   hosts: all
   become: true
   gather_facts: true
   roles:
+    - docker    
     - swarm
-    - docker
+    - deploy

@@ -1,3 +1,1 @@
 - include_tasks: install.yml
-- include_tasks: deploy.yml
-- include_tasks: container-info.yml
