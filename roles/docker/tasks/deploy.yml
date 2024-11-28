@@ -1,33 +1,33 @@
-- name: Debug group variable debug_var
-  debug:
-    var: debug_var
+# - name: Debug group variable debug_var
+#   debug:
+#     var: debug_var
 
-- name: Debug docker_containers variable
-  debug:
-    var: docker_containers
+# - name: Debug docker_containers variable
+#   debug:
+#     var: docker_containers
 
-- name: Debug group variables
-  debug:
-    msg: "Group {{ group_names }} has docker_containers: {{ docker_containers }}"
+# - name: Debug group variables
+#   debug:
+#     msg: "Group {{ group_names }} has docker_containers: {{ docker_containers }}"
 
-- name: Ensure Docker Compose is installed
-  hosts: all
-  become: yes
-  tasks:
-    - name: Install Docker Compose
-      shell: |
-        curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        chmod +x /usr/local/bin/docker-compose
-      args:
-        executable: /bin/bash
-      register: install_result
-      changed_when: "'Downloading' in install_result.stdout"
+# - name: Ensure Docker Compose is installed
+#   hosts: all
+#   become: yes
+#   tasks:
+#     - name: Install Docker Compose
+#       shell: |
+#         curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+#         chmod +x /usr/local/bin/docker-compose
+#       args:
+#         executable: /bin/bash
+#       register: install_result
+#       changed_when: "'Downloading' in install_result.stdout"
 
-    - name: Verify Docker Compose installation
-      command: docker-compose --version
-      register: compose_check
-    - debug:
-        var: compose_check.stdout
+#     - name: Verify Docker Compose installation
+#       command: docker-compose --version
+#       register: compose_check
+#     - debug:
+#         var: compose_check.stdout
 
 - name: Create Docker Compose file
   template:
@@ -35,10 +35,19 @@
     dest: /home/{{ ansible_user }}/docker-compose.yml
   when: docker_containers is defined and docker_containers | length > 0
 
-- name: Start containers using Docker Compose with explicit PATH
-  command: docker-compose up -d
+- name: Start containers using Docker Compose (v2 compatibility)
+  command: "{{ 'docker compose' if docker_compose_v2 else 'docker-compose' }} up -d"
   args:
     chdir: /home/{{ ansible_user }}
-  environment:
-    PATH: "/usr/local/bin:/usr/bin:/bin:{{ ansible_env.PATH }}"
   when: docker_containers is defined and docker_containers | length > 0
+  vars:
+    docker_compose_v2: "{{ (ansible_facts.packages | default({})).docker | selectattr('provides', 'defined') | map(attribute='provides') | flatten | list | join(' ') is search('compose') }}"
+
+
+# - name: Start containers using Docker Compose with explicit PATH
+#   command: docker-compose up -d
+#   args:
+#     chdir: /home/{{ ansible_user }}
+#   environment:
+#     PATH: "/usr/local/bin:/usr/bin:/bin:{{ ansible_env.PATH }}"
+#   when: docker_containers is defined and docker_containers | length > 0
