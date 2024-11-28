@@ -1,7 +1,7 @@
-docker_containers:
-  - name: vprofileapp
-    image: mikolajwiduch/vprofileapp
-    ports:
-      - "8080:8080"
-    volumes:
-      - "/data/vprofileapp:/app"
+# docker_containers:
+#   - name: vprofileapp
+#     image: mikolajwiduch/vprofileapp
+#     ports:
+#       - "8080:8080"
+#     volumes:
+#       - "/data/vprofileapp:/app"

@@ -1,4 +1,7 @@
-# docker_container_name: "vprofiledb"
-# docker_image: "mikolajwiduch/vprofiledb"
-# docker_ports:
-#   - "3306:3306"
+docker_containers:
+  - name: vprofiledb
+    image: mikolajwiduch/vprofiledb
+    ports:
+      - "3306:3306"
+    volumes:
+      - "/data/vprofiledb:/db"

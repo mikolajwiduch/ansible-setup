@@ -1,6 +1,10 @@
-- name: Debug docker_containers
+- name: Debug docker_containers variable
   debug:
     var: docker_containers
+
+- name: Debug group variables
+  debug:
+    msg: "Group {{ group_names }} has docker_containers: {{ docker_containers }}"
 
 - name: Create Docker Compose file
   template:

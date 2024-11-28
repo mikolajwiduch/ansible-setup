@@ -1,7 +1,7 @@
-docker_containers:
-  - name: vprofileweb
-    image: mikolajwiduch/vprofileweb
-    ports:
-      - "80:80"
-    volumes:
-      - "/data/vprofileweb:/web"
+# docker_containers:
+#   - name: vprofileweb
+#     image: mikolajwiduch/vprofileweb
+#     ports:
+#       - "80:80"
+#     volumes:
+#       - "/data/vprofileweb:/web"
