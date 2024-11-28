@@ -6,7 +6,8 @@
       - docker-selinux
       - docker-engine
     state: absent
-
+    
+# Debug 
 - name: Ensure required kernel modules are loaded
   shell: modprobe {{ item }}
   with_items:
@@ -34,12 +35,6 @@
   package:
     name: docker-ce
     state: present
-
-- name: Start Docker service
-  service:
-    name: docker
-    state: started
-    enabled: true
 
 - name: Install prerequisites for Docker Compose
   package:

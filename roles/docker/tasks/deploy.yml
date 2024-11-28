@@ -35,19 +35,19 @@
     dest: /home/{{ ansible_user }}/docker-compose.yml
   when: docker_containers is defined and docker_containers | length > 0
 
-- name: Start containers using Docker Compose (v2 compatibility)
-  command: "{{ 'docker compose' if docker_compose_v2 else 'docker-compose' }} up -d"
-  args:
-    chdir: /home/{{ ansible_user }}
-  when: docker_containers is defined and docker_containers | length > 0
-  vars:
-    docker_compose_v2: "{{ (ansible_facts.packages | default({})).docker | selectattr('provides', 'defined') | map(attribute='provides') | flatten | list | join(' ') is search('compose') }}"
-
-
-# - name: Start containers using Docker Compose with explicit PATH
-#   command: docker-compose up -d
+# - name: Start containers using Docker Compose (v2 compatibility)
+#   command: "{{ 'docker compose' if docker_compose_v2 else 'docker-compose' }} up -d"
 #   args:
 #     chdir: /home/{{ ansible_user }}
-#   environment:
-#     PATH: "/usr/local/bin:/usr/bin:/bin:{{ ansible_env.PATH }}"
 #   when: docker_containers is defined and docker_containers | length > 0
+#   vars:
+#     docker_compose_v2: "{{ (ansible_facts.packages | default({})).docker | selectattr('provides', 'defined') | map(attribute='provides') | flatten | list | join(' ') is search('compose') }}"
+
+
+- name: Start containers using Docker Compose with explicit PATH
+  command: docker-compose up -d
+  args:
+    chdir: /home/{{ ansible_user }}
+  environment:
+    PATH: "/usr/local/bin:/usr/bin:/bin:{{ ansible_env.PATH }}"
+  when: docker_containers is defined and docker_containers | length > 0
