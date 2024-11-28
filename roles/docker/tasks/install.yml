@@ -1,19 +1,20 @@
-- name: Remove conflicting Docker packages
-  package:
-    name:
-      - docker
-      - docker-common
-      - docker-selinux
-      - docker-engine
-    state: absent
-    
+# Debug
+# - name: Remove conflicting Docker packages
+#   package:
+#     name:
+#       - docker
+#       - docker-common
+#       - docker-selinux
+#       - docker-engine
+#     state: absent
+
 # Debug 
-- name: Ensure required kernel modules are loaded
-  shell: modprobe {{ item }}
-  with_items:
-    - overlay
-    - br_netfilter
-  ignore_errors: true
+# - name: Ensure required kernel modules are loaded
+#   shell: modprobe {{ item }}
+#   with_items:
+#     - overlay
+#     - br_netfilter
+#   ignore_errors: true
 
 - name: Install required packages for Docker
   package:
@@ -44,6 +45,12 @@
 - name: Install Docker Compose via pip
   pip:
     name: docker-compose
+
+# Debug
+- name: Check docker-compose version
+  command:
+    cmd: >
+      docker-compose --version
 
 - name: Start Docker service
   service:

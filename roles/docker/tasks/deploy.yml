@@ -48,6 +48,4 @@
   command: docker-compose up -d
   args:
     chdir: /home/{{ ansible_user }}
-  environment:
-    PATH: "/usr/local/bin:/usr/bin:/bin:{{ ansible_env.PATH }}"
   when: docker_containers is defined and docker_containers | length > 0
