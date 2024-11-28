@@ -24,25 +24,3 @@
     name: docker
     state: started
     enabled: true
-
-- name: Install Docker Compose (V2)
-  shell: |
-    if ! command -v docker compose > /dev/null 2>&1; then
-      yum install -y docker-ce-plugin-docker-compose;
-    fi
-  args:
-    executable: /bin/bash
-- name: Check Docker Compose version
-
-  shell: |
-    if command -v docker compose > /dev/null 2>&1; then
-      docker compose version;
-    elif command -v docker-compose > /dev/null 2>&1; then
-      docker-compose --version;
-    else
-      exit 1;
-    fi
-  register: compose_version
-  failed_when: compose_version.rc != 0
-- debug:
-    var: compose_version.stdout

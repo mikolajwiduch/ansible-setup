@@ -1,12 +1,13 @@
-- name: Create Docker Compose file
-  template:
-    src: docker-compose.j2
-    dest: /home/{{ ansible_user }}/docker-compose.yml
-  when: docker_containers is defined and docker_containers | length > 0
-
-- name: Start containers using Docker Compose
-  command: >
-    {{ 'docker compose' if 'Docker Compose version v2' in compose_version.stdout else 'docker-compose' }} up -d
-  args:
-    chdir: /home/{{ ansible_user }}
-  when: docker_containers is defined and docker_containers | length > 0
+- name: Deploy Docker containers on group-specific hosts
+  hosts: all
+  tasks:
+    - name: Start Docker containers for each group
+      community.docker.docker_container:
+        name: "{{ item.name }}"
+        image: "{{ item.image }}"
+        state: started
+        ports: "{{ item.ports }}"
+        volumes: "{{ item.volumes | default([]) }}"
+        env: "{{ item.environment | default({}) }}"
+      with_items: "{{ docker_containers }}"
+      when: docker_containers is defined
