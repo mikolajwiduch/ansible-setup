@@ -1,4 +1,3 @@
-debug_var: "webservers"
 docker_containers:
   - name: vprofileweb
     image: mikolajwiduch/vprofileweb

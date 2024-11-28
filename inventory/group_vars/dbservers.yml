@@ -1,4 +1,3 @@
-debug_var: "dbservers"
 docker_containers:
   - name: vprofiledb
     image: mikolajwiduch/vprofiledb
