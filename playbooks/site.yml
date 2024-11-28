@@ -1,27 +1,27 @@
-# - name: Deploy Docker containers
-#   hosts: all
+- name: Deploy Docker containers
+  hosts: all
+  become: true
+  gather_facts: true
+  roles:
+    - docker
+
+# - name: Deploy Docker containers for appservers
+#   hosts: appservers
 #   become: true
 #   gather_facts: true
 #   roles:
 #     - docker
 
-- name: Deploy Docker containers for appservers
-  hosts: appservers
-  become: true
-  gather_facts: true
-  roles:
-    - docker
+# - name: Deploy Docker containers for dbservers
+#   hosts: dbservers
+#   become: true
+#   gather_facts: true
+#   roles:
+#     - docker
 
-- name: Deploy Docker containers for dbservers
-  hosts: dbservers
-  become: true
-  gather_facts: true
-  roles:
-    - docker
-
-- name: Deploy Docker containers for webservers
-  hosts: webservers
-  become: true
-  gather_facts: true
-  roles:
-    - docker
+# - name: Deploy Docker containers for webservers
+#   hosts: webservers
+#   become: true
+#   gather_facts: true
+#   roles:
+#     - docker

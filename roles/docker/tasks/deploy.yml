@@ -16,8 +16,10 @@
     dest: /home/{{ ansible_user }}/docker-compose.yml
   when: docker_containers is defined and docker_containers | length > 0
 
-- name: Start containers using Docker Compose
+- name: Start containers using Docker Compose with explicit PATH
   command: docker-compose up -d
   args:
     chdir: /home/{{ ansible_user }}
+  environment:
+    PATH: "/usr/local/bin:/usr/bin:/bin:{{ ansible_env.PATH }}"
   when: docker_containers is defined and docker_containers | length > 0

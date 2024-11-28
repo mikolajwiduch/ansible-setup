@@ -15,3 +15,12 @@
         msg:
           MYSQL_DATABASE: "{{ docker_containers[0].environment.MYSQL_DATABASE }}"
           MYSQL_ROOT_PASSWORD: "{{ docker_containers[0].environment.MYSQL_ROOT_PASSWORD }}"
+
+    - name: Verify Docker Compose installation
+      command: docker-compose --version
+      register: compose_check
+      ignore_errors: true
+
+    - name: Debug Docker Compose version
+      debug:
+        var: compose_check.stdout
