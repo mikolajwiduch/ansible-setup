@@ -1,34 +1,41 @@
-- name: Test connectivity between nodes
-  ansible.builtin.shell: |
-    docker network ls | grep vprofile_network
-  register: network_check
-  failed_when: "'vprofile_network' not in network_check.stdout"
-  become: true
-  delegate_to: "{{ inventory_hostname }}"
-  ignore_errors: true
-
-- name: Display network check result
-  debug:
-    var: network_check.stdout
-  when: network_check is defined
-
-- name: Install nc (Netcat) on CentOS/RHEL-based systems
-  ansible.builtin.yum:
-    name: nc
-    state: present
-  become: true
-  when: ansible_facts.os_family == "RedHat"
-  delegate_to: "{{ inventory_hostname }}"
-
 - name: Test if Docker Swarm communication ports are open (2377/tcp, 7946/tcp, 7946/udp, 4789/udp)
   ansible.builtin.shell: |
-    nc -zv -w3 {{ inventory_hostname }} 2377 && nc -zv -w3 {{ inventory_hostname }} 7946 && nc -zv -w3 {{ inventory_hostname }} 4789
-  register: swarm_ports_check
-  failed_when: swarm_ports_check.rc != 0
+    nc -zv -w3 {{ hostvars['web01'].ansible_default_ipv4.address }} 2377 && nc -zv -w3 {{ hostvars['web01'].ansible_default_ipv4.address }} 7946 && nc -zv -w3 {{ hostvars['web01'].ansible_default_ipv4.address }} 4789
+  register: swarm_ports_check_web01
+  failed_when: swarm_ports_check_web01.rc != 0
   become: true
   delegate_to: "{{ inventory_hostname }}"
-
-- name: Display port test results
+  
+- name: Display port test results for web01
   debug:
-    var: swarm_ports_check
-  when: swarm_ports_check is defined
+    var: swarm_ports_check_web01
+  when: swarm_ports_check_web01 is defined
+  delegate_to: "{{ inventory_hostname }}"
+  
+- name: Test if Docker Swarm communication ports are open (2377/tcp, 7946/tcp, 7946/udp, 4789/udp) for app01
+  ansible.builtin.shell: |
+    nc -zv -w3 {{ hostvars['app01'].ansible_default_ipv4.address }} 2377 && nc -zv -w3 {{ hostvars['app01'].ansible_default_ipv4.address }} 7946 && nc -zv -w3 {{ hostvars['app01'].ansible_default_ipv4.address }} 4789
+  register: swarm_ports_check_app01
+  failed_when: swarm_ports_check_app01.rc != 0
+  become: true
+  delegate_to: "{{ inventory_hostname }}"
+  
+- name: Display port test results for app01
+  debug:
+    var: swarm_ports_check_app01
+  when: swarm_ports_check_app01 is defined
+  delegate_to: "{{ inventory_hostname }}"
+  
+- name: Test if Docker Swarm communication ports are open (2377/tcp, 7946/tcp, 7946/udp, 4789/udp) for db01
+  ansible.builtin.shell: |
+    nc -zv -w3 {{ hostvars['db01'].ansible_default_ipv4.address }} 2377 && nc -zv -w3 {{ hostvars['db01'].ansible_default_ipv4.address }} 7946 && nc -zv -w3 {{ hostvars['db01'].ansible_default_ipv4.address }} 4789
+  register: swarm_ports_check_db01
+  failed_when: swarm_ports_check_db01.rc != 0
+  become: true
+  delegate_to: "{{ inventory_hostname }}"
+  
+- name: Display port test results for db01
+  debug:
+    var: swarm_ports_check_db01
+  when: swarm_ports_check_db01 is defined
+  delegate_to: "{{ inventory_hostname }}"
