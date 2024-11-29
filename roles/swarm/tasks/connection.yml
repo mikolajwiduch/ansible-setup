@@ -15,6 +15,13 @@
     mode: '0755'
   become: true
 
+- name: Ensure br_netfilter.conf file exists
+  ansible.builtin.file:
+    path: /etc/modules-load.d/br_netfilter.conf
+    state: touch
+    mode: '0644'
+  become: true
+
 - name: Ensure kernel module for Docker networking is enabled
   ansible.builtin.command:
     cmd: modprobe br_netfilter
