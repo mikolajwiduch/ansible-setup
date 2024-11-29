@@ -1,0 +1,12 @@
+# Install firewalld if it's not installed
+- name: Install firewalld
+  package:
+    name: firewalld
+    state: present
+
+# Start and enable firewalld
+- name: Start and enable firewalld service
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
