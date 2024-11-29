@@ -2,10 +2,10 @@
 - name: Open ports for Docker Swarm communication
   firewalld:
     port:
-      - 2377/tcp
-      - 7946/tcp
-      - 7946/udp
-      - 4789/udp
+      - (2377, tcp)
+      - (7946, tcp)
+      - (7946, udp)
+      - (4789, udp)
     permanent: yes
     state: enabled
     zone: public
