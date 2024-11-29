@@ -1,0 +1,47 @@
+# Open necessary ports for Docker Swarm communication
+- name: Open ports for Docker Swarm communication
+  firewalld:
+    port:
+      - 2377/tcp
+      - 7946/tcp
+      - 7946/udp
+      - 4789/udp
+    permanent: yes
+    state: enabled
+    zone: public
+
+# Reload firewall for changes to take effect
+- name: Reload firewall to apply new rules
+  command: firewall-cmd --reload
+
+# Enable sysctl settings for Docker iptables handling
+- name: Enable bridge-nf-call-iptables sysctl setting
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: '1'
+    state: present
+    reload: yes
+
+- name: Enable bridge-nf-call-ip6tables sysctl setting
+  sysctl:
+    name: net.bridge.bridge-nf-call-ip6tables
+    value: '1'
+    state: present
+    reload: yes
+
+# Make sysctl settings persistent
+- name: Persist sysctl settings
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: "{{ item }}"
+    create: yes
+  loop:
+    - "net.bridge.bridge-nf-call-iptables = 1"
+    - "net.bridge.bridge-nf-call-ip6tables = 1"
+
+# Ensure Docker service is running (optional, if Docker is already installed)
+- name: Ensure Docker service is running
+  service:
+    name: docker
+    state: started
+    enabled: yes
