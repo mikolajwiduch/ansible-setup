@@ -1,10 +1,11 @@
 - name: Open ports for Docker Swarm communication
   firewalld:
+    # Specify the ports and protocols as a list of dictionaries
     port:
-      - "2377/tcp"
-      - "7946/tcp"
-      - "7946/udp"
-      - "4789/udp"
+      - { port: "2377/tcp", protocol: "tcp" }
+      - { port: "7946/tcp", protocol: "tcp" }
+      - { port: "7946/udp", protocol: "udp" }
+      - { port: "4789/udp", protocol: "udp" }
     permanent: yes
     state: enabled
     zone: public
