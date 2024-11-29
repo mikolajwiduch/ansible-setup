@@ -1,4 +1,5 @@
 - include_tasks: init.yml
 - include_tasks: join.yml
+- include_tasks: firewall.yml
 - include_tasks: ports.yml
 - include_tasks: network.yml
