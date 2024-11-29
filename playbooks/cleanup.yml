@@ -1,16 +1,18 @@
-- name: Cleanup Docker Swarm resources
+- name: Cleanup all Docker resources
   hosts: all
   become: true
   tasks:
-    - name: Remove all Docker containers
-      command: docker rm -f $(docker ps -aq)
+    - name: Stop and remove all containers
+      shell: docker rm -f $(docker ps -aq)
       ignore_errors: true
-      changed_when: false
 
     - name: Remove Swarm network
       command: docker network rm "{{ swarm_network_name }}"
       ignore_errors: true
-      changed_when: false
+
+    - name: Leave Docker Swarm
+      shell: docker swarm leave --force
+      ignore_errors: true
 
 - name: Leave Swarm (non-leader nodes only)
   hosts: all:!webservers[0]

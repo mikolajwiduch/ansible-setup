@@ -1,3 +1,5 @@
 - name: Create Swarm overlay network
   command: docker network create --driver overlay --attachable "{{ swarm_network_name }}"
+  register: swarm_network_creation
   when: inventory_hostname == groups['webservers'][0]
+  changed_when: "'{{ swarm_network_name }}' in swarm_network_creation.stdout"

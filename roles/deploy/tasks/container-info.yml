@@ -1,3 +1,4 @@
+# Debug
 - name: Display container details
   community.docker.docker_container_info:
     name: "{{ item.name }}"
