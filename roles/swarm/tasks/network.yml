@@ -1,7 +1,13 @@
-- name: Create Swarm overlay network
-  command: docker network create --driver overlay --attachable "{{ swarm_network_name }}"
-  args:
-    creates: "/var/lib/docker/network/files/{{ swarm_network_name }}"
-  register: swarm_network_creation
-  when: inventory_hostname == groups['webservers'][0]
-  changed_when: "'{{ swarm_network_name }}' not in swarm_network_creation.stdout"
+- name: Create Docker Swarm overlay network
+  ansible.builtin.command:
+    cmd: docker network create \
+         --driver overlay \
+         --attachable \
+         vprofile_network
+  become: true
+  ignore_errors: true
+  register: create_network
+
+- name: Debug network creation
+  debug:
+    var: create_network.stdout
