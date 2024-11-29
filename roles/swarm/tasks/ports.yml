@@ -1,14 +1,30 @@
 - name: Open ports for Docker Swarm communication
-  firewalld:
-    # Specify the ports and protocols as a list of dictionaries
-    port:
-      - { port: "2377/tcp", protocol: "tcp" }
-      - { port: "7946/tcp", protocol: "tcp" }
-      - { port: "7946/udp", protocol: "udp" }
-      - { port: "4789/udp", protocol: "udp" }
-    permanent: yes
-    state: enabled
-    zone: public
+  ansible.builtin.command:
+    cmd: "firewall-cmd --permanent --zone=public --add-port=2377/tcp"
+  become: true
+  notify:
+    - Reload firewalld
+
+- name: Open port 7946/tcp for Docker Swarm
+  ansible.builtin.command:
+    cmd: "firewall-cmd --permanent --zone=public --add-port=7946/tcp"
+  become: true
+  notify:
+    - Reload firewalld
+
+- name: Open port 7946/udp for Docker Swarm
+  ansible.builtin.command:
+    cmd: "firewall-cmd --permanent --zone=public --add-port=7946/udp"
+  become: true
+  notify:
+    - Reload firewalld
+
+- name: Open port 4789/udp for Docker Swarm
+  ansible.builtin.command:
+    cmd: "firewall-cmd --permanent --zone=public --add-port=4789/udp"
+  become: true
+  notify:
+    - Reload firewalld
 
 # Reload firewall for changes to take effect
 - name: Reload firewall to apply new rules
