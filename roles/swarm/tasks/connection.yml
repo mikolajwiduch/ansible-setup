@@ -1,0 +1,34 @@
+# Forcing connection
+- name: Disable firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: stopped
+    enabled: no
+
+- name: Flush iptables rules
+  ansible.builtin.command: iptables -F
+
+- name: Ensure kernel modules for Docker networking are enabled
+  ansible.builtin.shell: |
+    modprobe br_netfilter
+    echo "net.bridge.bridge-nf-call-iptables=1" >> /etc/sysctl.conf
+    echo "net.bridge.bridge-nf-call-ip6tables=1" >> /etc/sysctl.conf
+    sysctl -p
+  args:
+    warn: false
+
+- name: Open required ports for Docker Swarm
+  ansible.builtin.shell: |
+    iptables -A INPUT -p tcp --dport 2377 -j ACCEPT
+    iptables -A INPUT -p tcp --dport 7946 -j ACCEPT
+    iptables -A INPUT -p udp --dport 7946 -j ACCEPT
+    iptables -A INPUT -p udp --dport 4789 -j ACCEPT
+    iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+    iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+    iptables -P INPUT ACCEPT
+    iptables -P FORWARD ACCEPT
+
+- name: Restart Docker service
+  ansible.builtin.service:
+    name: docker
+    state: restarted
