@@ -1,9 +1,6 @@
 - name: Create Docker Swarm overlay network
   ansible.builtin.command:
-    cmd: docker network create \
-         --driver overlay \
-         --attachable \
-         vprofile_network
+    cmd: docker network create --driver overlay --attachable vprofile_network
   become: true
   ignore_errors: true
   register: create_network
