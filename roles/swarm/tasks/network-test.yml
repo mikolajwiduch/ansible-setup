@@ -1,3 +1,4 @@
+# Debug
 - name: Test if Docker Swarm communication ports are open (2377/tcp, 7946/tcp, 7946/udp, 4789/udp)
   ansible.builtin.shell: |
     nc -zv -w3 {{ hostvars['web01'].ansible_default_ipv4.address }} 2377 && nc -zv -w3 {{ hostvars['web01'].ansible_default_ipv4.address }} 7946 && nc -zv -w3 {{ hostvars['web01'].ansible_default_ipv4.address }} 4789
