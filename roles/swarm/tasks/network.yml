@@ -1,5 +1,5 @@
 - name: Create Swarm overlay network
-  command: docker network create --driver overlay "{{ swarm_network_name }}"
+  command: docker network create --driver overlay --attachable "{{ swarm_network_name }}"
   args:
     creates: "/var/lib/docker/network/files/{{ swarm_network_name }}"
   register: swarm_network_creation
