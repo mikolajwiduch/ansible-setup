@@ -4,7 +4,7 @@
     image: "{{ item.image }}"
     state: started
     networks:
-      - name: swarm_overlay
+      - name: "{{ swarm_network_name }}"
     ports: "{{ item.ports }}"
     volumes: "{{ item.volumes | default([]) }}"
     env: "{{ item.environment | default({}) }}"
