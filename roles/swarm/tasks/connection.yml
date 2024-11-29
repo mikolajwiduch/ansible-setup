@@ -8,6 +8,13 @@
 - name: Flush iptables rules
   ansible.builtin.command: iptables -F
 
+- name: Ensure the modules-load.d directory exists
+  ansible.builtin.file:
+    path: /etc/modules-load.d
+    state: directory
+    mode: '0755'
+  become: true
+
 - name: Ensure kernel module for Docker networking is enabled
   ansible.builtin.command:
     cmd: modprobe br_netfilter
