@@ -1,0 +1,34 @@
+- name: Test connectivity between nodes
+  ansible.builtin.shell: |
+    docker network ls | grep vprofile_network
+  register: network_check
+  failed_when: "'vprofile_network' not in network_check.stdout"
+  become: true
+  delegate_to: "{{ inventory_hostname }}"
+  ignore_errors: true
+
+- name: Display network check result
+  debug:
+    var: network_check.stdout
+  when: network_check is defined
+
+- name: Install nc (Netcat) on CentOS/RHEL-based systems
+  ansible.builtin.yum:
+    name: nc
+    state: present
+  become: true
+  when: ansible_facts.os_family == "RedHat"
+  delegate_to: "{{ inventory_hostname }}"
+
+- name: Test if Docker Swarm communication ports are open (2377/tcp, 7946/tcp, 7946/udp, 4789/udp)
+  ansible.builtin.shell: |
+    nc -zv -w3 {{ inventory_hostname }} 2377 && nc -zv -w3 {{ inventory_hostname }} 7946 && nc -zv -w3 {{ inventory_hostname }} 4789
+  register: swarm_ports_check
+  failed_when: swarm_ports_check.rc != 0
+  become: true
+  delegate_to: "{{ inventory_hostname }}"
+
+- name: Display port test results
+  debug:
+    var: swarm_ports_check
+  when: swarm_ports_check is defined

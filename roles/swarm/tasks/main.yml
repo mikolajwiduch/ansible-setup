@@ -3,3 +3,4 @@
 - include_tasks: ports.yml
 - include_tasks: join.yml
 - include_tasks: network.yml
+- include_tasks: network-test.yml
