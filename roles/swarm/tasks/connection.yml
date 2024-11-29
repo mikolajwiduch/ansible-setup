@@ -8,14 +8,17 @@
 - name: Flush iptables rules
   ansible.builtin.command: iptables -F
 
-- name: Ensure kernel modules for Docker networking are enabled
-  ansible.builtin.shell: |
-    modprobe br_netfilter
-    echo "net.bridge.bridge-nf-call-iptables=1" >> /etc/sysctl.conf
-    echo "net.bridge.bridge-nf-call-ip6tables=1" >> /etc/sysctl.conf
-    sysctl -p
-  args:
-    warn: false
+- name: Ensure kernel module for Docker networking is enabled
+  ansible.builtin.command:
+    cmd: modprobe br_netfilter
+  become: true
+
+- name: Ensure kernel module is persistently enabled
+  ansible.builtin.lineinfile:
+    path: /etc/modules-load.d/br_netfilter.conf
+    line: br_netfilter
+    state: present
+  become: true
 
 - name: Open required ports for Docker Swarm
   ansible.builtin.shell: |
